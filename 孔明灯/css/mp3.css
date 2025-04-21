@@ -1,0 +1,30 @@
+#audio_btn{ position: fixed;
+	  right:60px;
+	  top:60px;
+	  width: 60px;
+	  height: 60px;
+	  background-size: contain;
+	  z-index:999999
+  }
+.audio_play{ background-image: url('../images/mp3play.png');}
+.audio_stop{ background-image: url('../images/mp3stop.png');}
+.rotate {
+	  -webkit-animation: rotating 1.2s linear infinite;
+	 -moz-animation: rotating 1.2s linear infinite;
+	 -o-animation: rotating 1.2s linear infinite;
+	 animation: rotating 1.2s linear infinite
+ }
+ 
+ @-webkit-keyframes rotating {
+	 from { -webkit-transform: rotate(0) }
+	 to { -webkit-transform: rotate(360deg) }
+ }
+ 
+ @keyframes rotating {
+	 from { transform: rotate(0) }
+	 to { transform: rotate(360deg) }
+ }
+ @-moz-keyframes rotating {
+	 from { -moz-transform: rotate(0) }
+	 to { -moz-transform: rotate(360deg) }
+ }
