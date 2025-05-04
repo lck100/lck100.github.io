@@ -184,7 +184,7 @@ $(function() {
   function loadLight() {
     var texture = new THREE.Texture();
     var loader = new THREE.ImageLoader();
-    loader.load('images/light.jpg?ver=1', function(image) {
+    loader.load('./images/light.jpg?ver=1', function(image) {
       texture.image = image;
       texture.needsUpdate = true
     });
@@ -248,7 +248,6 @@ $(function() {
         timeout: 30000,
         success: function(res) {
           if (res.data) {
-            console.log(res.data, '获取到孔明灯详情')
             selectNext();
           }
         }
@@ -313,7 +312,8 @@ $(function() {
       	reloadNextMat(i)
       }*/
       initLight()
-    })
+    });
+    
   }
 
   function reloadNextMat(imageLoadId) {
@@ -429,7 +429,6 @@ $(function() {
         let len = Object.keys(window.lanternList).length;
         randomNum = parseInt(Math.random() * len, 10)
         currentLantern = window.lanternList[randomNum];
-        console.log('我点了');
 
         if (currentLantern) {
           selected = intersects[0].object;
@@ -728,7 +727,6 @@ $(function() {
             '</div>在<div class="hall_name" id="' + index + '">' + hallName +
             '</div>点亮孔明灯<img class="gift" src="images/icon_3.png" id="' +
             index + '"/><span>' + item.distance_time + '</span></div>';
-          console.log(item.content)
         })
         $('.marquee-box').html(childStr);
 

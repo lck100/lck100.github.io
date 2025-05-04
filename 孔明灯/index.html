@@ -9,6 +9,7 @@
     <meta name="Keywords" content="孔明灯">
     <meta name="Description" content="忆往日">
     <link rel="stylesheet" href="./css/element-ui.css">
+        <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./css/css.css">
     <style>
       * {
@@ -245,7 +246,7 @@
             z-index: 8888;
             box-sizing: border-box;
         }
-        .me-light{position: absolute;width: 70px;right: 17px;top:50px;z-index: 9999;cursor:pointer;}
+        .me-light{position: absolute;width: 70px;right: 17px;top:70px;z-index: 9999;cursor:pointer;}
         .me-sky-infinite{position: absolute;width: 70px;right: 17px;top:140px;z-index: 9999;cursor:pointer;}
         .me-sky-pure{position: absolute;width: 70px;right: 17px;top:225px;z-index: 9999;cursor:pointer;}
         .me-sky{position: absolute;width: 70px;right: 17px;top:310px;z-index: 9999;cursor:pointer;}
@@ -344,22 +345,25 @@
         }
     </style>
     <script type="text/javascript" src="./js/21284005.js"></script>
+    <!-- 导入烟花绽放需要的js文件 -->
+    <script src="./js/jquery-1.11.0.min.js"></script>
+    <script src="./js/jquery.fireworks.js"></script>
   </head>
   <body>
 
     <div id="app">
-      <div id="container"></div>
+      <div id="container"  class="fade-in"></div>
       <div id="loading">
         <div class="bg"></div>
         <img class="pic" src="./images/firecrackers.gif">
         <div class="txt">0</div>
       </div>
-      <!--<img class="me-light" src="./images/me-light.png" @click="fangdeng()" id="btn_fangdeng" />-->
+      <img class="me-light" src="./images/yanhua.png" id="btn_yanhua" @click="yanhua()" />
       <img class="me-sky-infinite" src="./images/me-sky-infinite.png" @click="my_sky_infinite()" id="btn_my_sky_infinite"
         title="显示所有孔明灯" />
       <img class="me-sky-pure" src="./images/me-sky-pure.png" @click="my_sky_pure()" id="btn_my_sky_pure" title="显示墨浊所放孔明灯" />
       <img class="me-sky" src="./images/me-sky.png" @click="my_sky()" id="btn_my_sky" />
-      <!--<img class="me-ta" src="./images/me-ta.png" @click="to_ta()" id="btn_to_ta" />-->
+      <img class="me-ta" src="./images/me-ta.png" @click="to_ta()" id="btn_to_ta" />
       <!-- <img class="me-ta-my" src="./images/me-ta-my.png" @click="to_ta_my()" id="btn_to_ta_my" /> -->
       <img class="me-fresh" src="./images/me-fresh.png" onclick="fresh()" id="btn_fresh" />
       <!-- <img class="me-bb" src="./images/me-bb.png" @click="to_bb()" id="btn_to_bb" /> -->
@@ -423,6 +427,7 @@
           </div>
         </div>
         <canvas id="canvas"></canvas>
+        <canvas id="yanhua-canvas" style="position: absolute; top: 0; left: 0;"></canvas>
       </div>
     </div>
     <!-- // mzy添加 -->
@@ -529,8 +534,11 @@
           back() {
             //window.history.back();
           },
-          fangdeng() {
-            javascript: mzy_show_dialog('fangdeng.html', 600, 280, 1, 1, 1, 2000, 80);
+          yanhua() {
+            // javascript: mzy_show_dialog('fangdeng.html', 600, 280, 1, 1, 1, 2000, 80);
+            //alert('放烟花')
+            document.getElementById("btn_yanhua").addEventListener("click", mouseDownHandler);
+
           },
           to_fuyunsi() {
             javascript: mzy_show_dialog('fuyunsi.html', 300, 300, 1, 1, 1, 2000, 80);
@@ -586,7 +594,7 @@
             })
           },
           to_ta() {
-            window.open('ta.html', '_blank');
+            window.open('./ta.html', '_blank');
           },
           to_ta_my() {
             javascript: mzy_show_dialog('my_ta.html', 600, 280, 1, 1, 1, 2000, 80);
@@ -621,8 +629,45 @@
     <!-- 背景音乐 -->
     <link rel="stylesheet" href="./css/mp3.css">
     <div id="audio_btn" class="rotate audio_play" style="position: absolute;right:37px;top:20px;width: 30px;height: 30px;background-size: contain;z-index:999999;">
-      <audio loop src="./video/bg1.mp3" id="media" autoplay="" preload=""></audio>
+      <audio loop src="./video/bg1.mp3" id="media" loop="loop" autoplay="" preload=""></audio>
     </div>
-    <script src="./js/mp3.js"></script>
+    <!--<script src="./js/mp3.js"></script>-->
+    <script type="text/javascript">
+      // 获取音频元素
+      const mp3_player = document.getElementById('media');
+
+      // 定义播放音频的函数
+      function playAudio() {
+        mp3_player.play().then(() => {
+          console.log('音频播放成功！');
+        }).catch(err => {
+          console.error('音频播放失败：', err);
+        });
+      }
+
+      // 监听全局点击事件
+      document.addEventListener('click', (e) => {
+        var id = e.target.id;
+        if (id == 'audio_btn') {
+          var is_playing = document.getElementById('audio_btn').getAttribute('class').includes('play');
+          console.log("is_playing: " + is_playing)
+          if (is_playing == false) { //不用toggleClass是为了避免谷歌浏览器或其他无法自动播放的情况下图标不对的问题
+            $("#audio_btn").removeClass("audio_stop");
+            $("#audio_btn").addClass("audio_play");
+            mp3_player.play();
+          } else {
+            mp3_player.pause();
+            $("#audio_btn").removeClass("audio_play");
+            $("#audio_btn").addClass("audio_stop");
+          }
+        } else if (id != 'audio_btn' && document.getElementById('audio_btn').getAttribute('class').includes('play')) {
+          playAudio();
+          // 移除全局点击事件监听器，避免重复触发
+          document.removeEventListener('click', playAudio);
+        }
+      });
+    </script>
   </body>
+  <!-- 烟花绽放代码 -->
+  <script src="./js/yanhua.js"></script>
 </html>
